@@ -3,3 +3,7 @@
   %input{type: 'text', name: 'classcode'}
   %input{type: 'text', name: 'teachercode'}
   %input{type: 'submit'}
+
+-if @okay
+  %a You have just registered #{@classname}
+  %a{href: '/start'} Click here to start the class
