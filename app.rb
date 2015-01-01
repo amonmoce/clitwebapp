@@ -18,7 +18,7 @@ class ClitApp < Sinatra::Base
   get '/register' do
     haml :register
   end
-  
+
   post '/register' do
     @classname = params[:classname]
     registration_data = {
@@ -32,6 +32,20 @@ class ClitApp < Sinatra::Base
       @okay = 1
     end
     haml :register
+  end
+
+  post '/upload' do
+    @filename = params[:file][:filename]
+    file = params[:file][:tempfile]
+    File.open("./public/#{@filename}", 'wb') do |f|
+      f.write(file.read)
+    end
+    @upload = 1
+    haml :register
+  end
+
+  get '/uploaded_files/:filename' do
+    send_file File.join('public', params[:filename])
   end
 
   get '/start' do
