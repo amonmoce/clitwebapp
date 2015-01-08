@@ -1,5 +1,7 @@
 require 'sinatra/base'
 require 'haml'
+require 'httparty'
+require 'asposecloud'
 require_relative 'model/registered'
 
 class ClitApp < Sinatra::Base
@@ -10,6 +12,8 @@ class ClitApp < Sinatra::Base
     region:ENV['AWS_REGION']
     )
   end
+
+  SERVER_URI = 'http://localhost:9292'
 
   get '/' do
       haml :home
@@ -41,11 +45,24 @@ class ClitApp < Sinatra::Base
       f.write(file.read)
     end
     @upload = 1
+    #response = HTTParty.post('https://view-upload.herokuapp.com//url-upload', :body => { :document-url => "#{SERVER_URI}/uploaded_files/#{@filename}"})
+    #File.delete("./public/#{@filename}")
+    redirect "/convert/#{@filename}"
     haml :register
   end
 
   get '/uploaded_files/:filename' do
     send_file File.join('public', params[:filename])
+  end
+
+  get '/convert/:filename' do
+    app_sid = ENV['APP_SID']
+    app_key = ENV['APP_KEY']
+    Aspose::Cloud::Common::AsposeApp.new(app_sid, app_key)
+    Aspose::Cloud::Common::Product.set_base_product_uri('http://api.aspose.com/v1.1')
+    converter_object = Aspose::Cloud::Pdf::Converter.new("#{SERVER_URI}/uploaded_files/#{params[:filename]}")
+    puts converter_object.convert('', '', 'html')
+
   end
 
   get '/start' do
