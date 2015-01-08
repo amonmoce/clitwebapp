@@ -5,9 +5,10 @@ gem "haml"
 gem "aws-sdk"
 gem "httparty"
 
-gem "asposecloud"
-gem 'rest-client'
-gem 'mime-types'
+#gem "asposecloud"
+#gem 'rest-client'
+#gem 'mime-types'
+gem 'pdf-reader'
 
 group :production do
   gem "thin"

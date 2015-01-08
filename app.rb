@@ -1,8 +1,10 @@
 require 'sinatra/base'
 require 'haml'
 require 'httparty'
-require 'asposecloud'
+require 'json'
+require 'pdf-reader'
 require_relative 'model/registered'
+require_relative 'model/pdfdata'
 
 class ClitApp < Sinatra::Base
   configure do
@@ -35,6 +37,7 @@ class ClitApp < Sinatra::Base
     if registration.save
       @okay = 1
     end
+    @@classid = registration.id
     haml :register
   end
 
@@ -56,13 +59,23 @@ class ClitApp < Sinatra::Base
   end
 
   get '/convert/:filename' do
-    app_sid = ENV['APP_SID']
-    app_key = ENV['APP_KEY']
-    Aspose::Cloud::Common::AsposeApp.new(app_sid, app_key)
-    Aspose::Cloud::Common::Product.set_base_product_uri('http://api.aspose.com/v1.1')
-    converter_object = Aspose::Cloud::Pdf::Converter.new("#{SERVER_URI}/uploaded_files/#{params[:filename]}")
-    puts converter_object.convert('', '', 'html')
-
+    pdf_file = []
+    reader = PDF::Reader.new("public/#{params[:filename]}")
+    reader.pages.each do |page|
+      pdf_file << page.text
+    end
+    pdf_text = pdf_file.join(" NEXTPAGE ")
+    data2send = {
+      pdfdata: pdf_text,
+      classid: @@classid
+    }
+    pdfdata = Pdfdata.new(data2send)
+    @converted = 0
+    if pdfdata.save
+      @converted = 1
+    end
+    @filename = params[:filename]
+    haml :register
   end
 
   get '/start' do

@@ -3,8 +3,8 @@
   %form{action: '/upload', method: 'post', enctype: 'multipart/form-data'}
     %input{type: 'file', name: 'file'}
     %input{type: 'submit'}
--elsif @upload
-  %a You have uploaded #{@filename}
+-elsif @converted
+  %a You have succesfully uploaded #{@filename}
 -else
   %form{action: '/register', method: 'post'}
     %input{type: 'text', name: 'classname'}
