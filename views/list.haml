@@ -3,6 +3,15 @@
   %tr
     %td #{@classname[index]}
     %td
-      %form{action: '', method: 'get'}
+      %form{action: "/translated/#{value}", method: 'post'}
+        %select{name: 'language'}
+          %option Choose the translation language
+          %option English
+          %option Mandarin (traditional)
+          %option Spanish
+          %option Ukrainian
+          %option Vietnamese
+          %option Indonesian
+          %option Malaysian
         %input{type: 'submit', value: 'this class material'}
     %br
