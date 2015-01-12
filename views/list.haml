@@ -1,1 +1,8 @@
-List of all classes
+%table
+-@classname.each_with_index do |value, index|
+  %tr
+    %td #{@classname[index]}
+    %td
+      %form{action: '', method: 'get'}
+        %input{type: 'submit', value: 'this class material'}
+    %br

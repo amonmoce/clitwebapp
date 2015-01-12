@@ -83,6 +83,17 @@ class ClitApp < Sinatra::Base
   end
 
   get '/list' do
+    @classcode = []
+    @classname = []
+    dynamo_db = AWS::DynamoDB.new
+    dynamo_db.tables.each do |x|
+      if x.name == 'Registered'
+        x.load_schema.items.each do |item|
+          @classcode << item.attributes['classcode']
+          @classname << item.attributes['classname']
+        end
+      end
+    end
     haml :list
   end
 
