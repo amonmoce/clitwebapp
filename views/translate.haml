@@ -1,4 +1,7 @@
 %form{action: '/translation', method: 'post'}
   %textarea{name: 'source'}
-  %input{type: 'submit', value: 'Translate ==>'}
+  %input{type: 'submit', value: 'Translate'}
+%div{class: 'source'}
+  #{@source}
 %div{class: 'target'}
+  #{@target}

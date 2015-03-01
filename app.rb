@@ -102,7 +102,14 @@ class ClitApp < Sinatra::Base
   end
 
   post '/translation' do
-    `python decode > output`
+    @source = params[:source]
+    @target = ''
+    File.open("translation/input", 'w') {|f| f.write(@source) }
+    `python translation/decode > translation/output`
+    File.open("translation/output", "r").each_line do |line|
+      @target << line
+    end
+    haml :translate
   end
 
   get '/translated' do
