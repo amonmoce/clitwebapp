@@ -97,6 +97,14 @@ class ClitApp < Sinatra::Base
     haml :list
   end
 
+  get '/translate' do
+    haml :translate
+  end
+
+  post '/translation' do
+    `python decode > output`
+  end
+
   get '/translated' do
     haml :translated
   end
